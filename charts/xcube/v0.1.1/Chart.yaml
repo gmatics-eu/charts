@@ -4,6 +4,7 @@ version: 0.1.8
 apiVersion: v2
 keywords:
   - xcube
+  - gmatics
 maintainers:
   - name: Raffaele Scarano
     email: raffaele.scarano@gmatics.eu
