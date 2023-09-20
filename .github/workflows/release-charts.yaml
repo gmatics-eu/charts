@@ -19,10 +19,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Run Helm package
-        run: |
-          helm package charts/my-helm-chart
-
       - name: Run chart-releaser
         uses: lucernae/chart-releaser-action@rancher-1.0
         with:
