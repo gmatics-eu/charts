@@ -19,10 +19,13 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Run chart-releaser
-        uses: lucernae/chart-releaser-action@rancher-1.0
+      - name: Run Helm package
+        run: |
+          helm package charts/xcube/v0.1.1
+
+      - name: Release Helm charts
+        uses: helm/chart-releaser-action@v1.1.0
         with:
-          level: 3
-          force: true
-        env:
-          CR_TOKEN: "${{ secrets.API_GITHUB_TOKEN }}"
+          charts_dir: charts
+          token: "${{ secrets.API_GITHUB_TOKEN }}"
+
