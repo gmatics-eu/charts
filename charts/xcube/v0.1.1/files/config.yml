@@ -16,15 +16,6 @@ DatasetAttribution:
   - "© by Brockmann Consult GmbH 2020, contains modified Copernicus Data 2019, processed by ESA"
   - "© by EU H2020 CyanoAlert project"
 
-#DatasetChunkCacheSize: 100M
-
-## You may want to specify a location of your server resources.
-#base_dir: s3://<bucket>/<path-to-your>/<resources>/
-
-## You may want to specify a remote location of your viewer resources.
-#Viewer:
-#  Configuration:
-#    Path: s3://<bucket>/<path-to-your-viewer>/<resources>
 
 Datasets:
   # The first dataset "./cube-1-250-250.levels" is a tile-optimized
