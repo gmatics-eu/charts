@@ -29,7 +29,7 @@ spec:
       imagePullSecrets:
         - name: docker-pull-secret
       containers:
-        - image: gmaticseu/xcube@sha256:a05c960957e0a545e4541dd69bb4ead2d6d0b20270e45eb8a9723def667809a6
+        - image: gmaticseu/xcube:SYS-92
           name: xcube
           ports:
             - containerPort: 8080
