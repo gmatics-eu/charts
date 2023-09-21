@@ -41,6 +41,20 @@ entries:
     version: 0.1.1
   xcube:
   - apiVersion: v2
+    created: "2023-09-21T10:28:44.326286269Z"
+    description: A generated Helm Chart for xcube from Gmatics
+    digest: 3bed3e05e59b70a9ca02546dc16c0e6e241463c3c70f11fb3d2ff1ba5089a9ff
+    keywords:
+    - xcube
+    - gmatics
+    maintainers:
+    - email: raffaele.scarano@gmatics.eu
+      name: Raffaele Scarano
+    name: xcube
+    urls:
+    - https://github.com/gmatics-eu/charts/releases/download/xcube-0.1.7/xcube-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
     created: "2023-09-21T10:10:26.131195456Z"
     description: A generated Helm Chart for xcube from Gmatics
     digest: 665084ee556f3707cdde424fe5ee4cd49b4e334fd11ac6d4aa878ed3ec9bbb4c
@@ -96,4 +110,4 @@ entries:
     urls:
     - https://github.com/gmatics-eu/charts/releases/download/xcube-0.1.3/xcube-0.1.3.tgz
     version: 0.1.3
-generated: "2023-09-21T10:10:26.131315255Z"
+generated: "2023-09-21T10:28:44.326397371Z"
