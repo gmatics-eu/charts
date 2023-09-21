@@ -31,8 +31,6 @@ spec:
       containers:
         - image: gmaticseu/xcube:SYS-92
           name: xcube
-          command: ["/bin/sh", "-c", "sleep 600"]
-
           ports:
             - containerPort: 8080
               protocol: TCP
