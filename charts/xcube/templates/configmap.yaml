@@ -6,92 +6,24 @@ metadata:
 data:
   config.yml: |
 
-    Datasets:
-      - Identifier: local
-        Title: Local OLCI L2C cube for region SNS
-        BoundingBox: [0.0, 50, 5.0, 52.5]
-        FileSystem: file
-        Path: cube-1-250-250.levels
-        Style: default
-        TimeSeriesDataset: local_ts
-        Variables:
-          - "conc_chl"
-          - "chl_category"
-          - "conc_tsm"
-          - "chl_tsm_sum"
-          - "kd489"
-          - "*"
-        Augmentation:
-          Path: compute_extra_vars.py
-          Function: compute_variables
-          InputParameters:
-            factor_chl: 0.2
-            factor_tsm: 0.7
-        PlaceGroups:
-         <<OutputTruncated>>side-cube/${image}")
-      - Identifier: outside-cube
-        Title: Places outside the cube
-        Path: places/outside-cube.geojson
-        PropertyMapping:
-          image: ${resolve_config_path("images/outside-cube/${ID}.jpg")}
+    DatasetAttribution:
+      - "© by Synergise Inc. and ESA"
 
-    Styles:
-      - Identifier: default
-        ColorMappings:
-          conc_chl:
-            ColorBar: plasma
-            ValueRange: [0., 24.]
-          conc_tsm:
-            ValueRange: [0., 24.]
-          kd489:
-            ColorBar: jet
-            ValueRange: [0., 6.]
-          rgb:
-            Red:
-              Variable: conc_chl
-              ValueRange: [0., 24.]
-            Green:
-              Variable: conc_tsm
-              ValueRange: [0., 100.]
-            Blue:
-              Variable: kd489
-              ValueRange: [0., 6.]
-      - Identifier: tif_style
-        ColorMappings:
-          band_1:
-            ColorBar: bone
-            ValueRange: [ 0., 255. ]
-          band_2:
-            ColorBar: bone
-            ValueRange: [ 0., 255. ]
-          band_3:
-            ColorBar: bone
-            ValueRange: [ 0., 255. ]
-          rgb:
-            Red:
-              Variable: band_1
-              ValueRange: [ 0., 255. ]
-            Green:
-              Variable: band_2
-              ValueRange: [ 0., 255. ]
-            Blue:
-              Variable: band_3
-              ValueRange: [ 0., 255. ]
+    DatasetChunkCacheSize: 100M
 
-    ServiceProvider:
-      ProviderName: Brockmann Consult GmbH
-      ProviderSite: https://www.brockmann-consult.de
-      ServiceContact:
-        IndividualName: Norman Fomferra
-        PositionName: Senior Software Engineer
-        ContactInfo:
-          Phone:
-            Voice: +49 40 696 389 300
-            Facsimile: +49 40 696 389 399
-          Address:
-            DeliveryPoint: Chrysanderstr. 1
-            City: Hamburg
-            AdministrativeArea: Hamburg
-            PostalCode: 21029
-            Country: Germany
-            ElectronicMailAddress: info@brockmann-consult.de
+    DataStores:
+
+      # This section needs to be kept, because it is part of xcube server documentation using DataStores.
+      - Identifier: edc
+        StoreId: s3
+        StoreParams:
+          root: xcube-dcfs/edc-xc-viewer-data
+          max_depth: 1
+          storage_options:
+            anon: true
+            # client_kwargs:
+            #  endpoint_url: https://s3.eu-central-1.amazonaws.com
+        Datasets:
+          - Path: "*2.zarr"
+            Style: "default"
+
