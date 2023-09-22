@@ -22,11 +22,13 @@ spec:
   - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - pathType: ImplementationSpecific
-        backend:
-          serviceName: {{ template "geoserver.fullname" . }}
-          servicePort: 80
-        path: /geoserver
+        - path: /geoserver
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ template "geoserver.fullname" . }}
+              port:
+                number: 80
   {{- if .Values.ingress.tls.enabled }}
   tls:
     - hosts:
