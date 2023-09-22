@@ -22,7 +22,8 @@ spec:
   - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - backend:
+      - pathType: ImplementationSpecific
+        backend:
           serviceName: {{ template "geoserver.fullname" . }}
           servicePort: 80
         path: /geoserver
