@@ -16,7 +16,7 @@ metadata:
     {{- tpl . $ | nindent 4 }}
     {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   {{- if .Values.service.externalIPs }}
   externalIPs: {{ .Values.service.externalIPs }}
   {{- end }}

@@ -1,9 +1,9 @@
 image:
   registry: docker.io
-  repository: gmaticseu/geoserver
-  tag: ${image_tag}
-  pullPolicy: Always
-  privileged: true
+  repository: kartoza/geoserver
+  tag: "2.17.0"
+  pullPolicy: IfNotPresent
+  privileged: false
 
 geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/data_dir/gwc
@@ -12,7 +12,7 @@ geoserverUser: admin
 
 # For prefilled password
 # It will be stored in secret later
-geoserverPassword: password
+geoserverPassword:
 
 # Use this if you have predefined secrets
 existingSecret: |
@@ -54,7 +54,7 @@ extraVolume: |
 
 service:
   ## GeoServer service type
-  type: LoadBalancer
+  type: ClusterIP
   # clusterIP: ""
   # externalIPs: ""
   port: 80
@@ -70,12 +70,12 @@ service:
   # - 10.10.10.0/24
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: {}
   labels: {}
   host: geoserver.hostname
   tls:
-    enabled: true
+    enabled: false
     ## Provide secret name if tls is enabled
     secretName: geoserver-tls
 
