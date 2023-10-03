@@ -5,6 +5,10 @@ image:
   pullPolicy: IfNotPresent
   privileged: false
 
+GCStorage:
+  enabled: false
+  bucket_name:
+
 geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/data_dir/gwc
 
