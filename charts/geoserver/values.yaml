@@ -3,6 +3,7 @@ image:
   repository: kartoza/geoserver
   tag: "2.17.0"
   pullPolicy: IfNotPresent
+  privileged: false
 
 geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/data_dir/gwc

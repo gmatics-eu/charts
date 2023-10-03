@@ -41,6 +41,8 @@ spec:
         - name: {{ template "geoserver.fullname" . }}
           image: {{ template "geoserver.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            privileged: {{ .Values.image.privileged }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
