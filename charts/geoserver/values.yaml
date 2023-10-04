@@ -8,6 +8,7 @@ image:
 GCStorage:
   enabled: false
   bucket_name:
+  credentialsPath: /tmp/key.json
   lifecycle:
     enabled: false
 
