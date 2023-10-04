@@ -55,7 +55,7 @@ spec:
                 command:
                   - "/bin/sh"
                   - "-c"
-                  - "mkdir -p /mnt/{{ .Values.GCStorage.bucket_name }} && export GOOGLE_APPLICATION_CREDENTIALS={{ .Values.GCStorage.credentialsPath }} && gcsfuse --implicit-dirs -o nonempty {{ .Values.GCStorage.bucket_name }} /mnt/{{ .Values.GCStorage.bucket_name }}"
+                  - "mkdir -p /mnt/{{ .Values.GCStorage.bucket_name }} && export GOOGLE_APPLICATION_CREDENTIALS={{ .Values.GCStorage.credentialsPath }} && gcsfuse --implicit-dirs {{ .Values.GCStorage.bucket_name }} /mnt/{{ .Values.GCStorage.bucket_name }}"
             preStop:
               exec:
                 command: [ "fusermount", "-u", "/mnt/{{ .Values.GCStorage.bucket_name }}" ]
