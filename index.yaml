@@ -3,6 +3,27 @@ entries:
   geoserver:
   - apiVersion: v2
     appVersion: 2.17.0
+    created: "2023-10-04T13:09:42.346577559Z"
+    description: Chart for GeoServer
+    digest: 11be76e7ea6450eda732eaa5113fdd2fdfbe021a401949e534d8ace47e58fe50
+    home: http://geoserver.org
+    icon: https://raw.githubusercontent.com/kartoza/charts/master/assets/logo/GeoServer_500.png
+    keywords:
+    - GeoServer
+    - GIS
+    - Gmatics
+    - ingress
+    maintainers:
+    - email: raffaele.scarano@gmatics.eu
+      name: raffaele scarano
+    name: geoserver
+    sources:
+    - https://github.com/geoserver/geoserver
+    urls:
+    - https://github.com/gmatics-eu/charts/releases/download/geoserver-0.4.2/geoserver-0.4.2.tgz
+    version: 0.4.2
+  - apiVersion: v2
+    appVersion: 2.17.0
     created: "2023-10-04T12:55:20.373029881Z"
     description: Chart for GeoServer
     digest: fc9ee45a536506c5093ce931baf03eb2c0dd54ba7a037370737ec284461b0f08
@@ -310,4 +331,4 @@ entries:
     urls:
     - https://github.com/gmatics-eu/charts/releases/download/xcube-0.1.3/xcube-0.1.3.tgz
     version: 0.1.3
-generated: "2023-10-04T12:55:20.373251083Z"
+generated: "2023-10-04T13:09:42.346667467Z"
