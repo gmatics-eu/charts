@@ -38,7 +38,7 @@ spec:
         {{- end }}
     spec:
       {{- if .Values.GCStorage.enabled }}
-      serviceAccountName: {{- if .Values.GCStorage.serviceAccountName }}
+      serviceAccountName: {{ .Values.GCStorage.serviceAccountName }}
       securityContext:
         runAsUser: 1001
         runAsGroup: 2002
