@@ -47,6 +47,7 @@ spec:
 {{- end }}
 # PVC for GCS integration
 {{- if .Values.GCStorage.enabled }}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -60,4 +61,5 @@ spec:
       storage: 5Gi
   volumeName: {{ .Values.GCStorage.bucket_name }}-pv
   storageClassName: gcs-fuse-bucket
+...
 {{- end }}
