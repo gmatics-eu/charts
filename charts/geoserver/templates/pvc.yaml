@@ -45,3 +45,19 @@ spec:
       storage: {{ .Values.persistence.geowebcacheCacheDir.size | quote }}
 ...
 {{- end }}
+# PVC for GCS integration
+{{- if .Values.GCStorage.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.GCStorage.bucket_name }}-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: {{ .Values.GCStorage.bucket_name }}-pv
+  storageClassName: gcs-fuse-{{ .Values.GCStorage.bucket_name }}
+{{- end }}
