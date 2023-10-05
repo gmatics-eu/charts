@@ -39,10 +39,6 @@ spec:
     spec:
       {{- if .Values.GCStorage.enabled }}
       serviceAccountName: {{ .Values.GCStorage.serviceAccountName }}
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 2002
-        fsGroup: 3003
       {{- end }}
       containers:
         - name: {{ template "geoserver.fullname" . }}
