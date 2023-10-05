@@ -59,7 +59,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  volumeName: {{ .Values.GCStorage.bucket_name }}-pv
+  volumeName: gcs-bucket-pv
   storageClassName: gcs-fuse-bucket
 ...
 {{- end }}

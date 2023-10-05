@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ .Values.GCStorage.bucket_name }}-pv
+  name: gcs-bucket-pv
 spec:
   accessModes:
   - ReadWriteOnce
