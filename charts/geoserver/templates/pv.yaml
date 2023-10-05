@@ -4,7 +4,7 @@ metadata:
   name: cs-fuse-pv
 spec:
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   capacity:
     storage: 5Gi
   storageClassName: cs-fuse-bucket #does not need to refer to an existing StorageClass object

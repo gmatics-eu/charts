@@ -54,7 +54,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi
