@@ -7,7 +7,7 @@ spec:
   - ReadWriteOnce
   capacity:
     storage: 5Gi
-  storageClassName: cs-fuse-bucket #does not need to refer to an existing StorageClass object
+  storageClassName: gcs-fuse-bucket #does not need to refer to an existing StorageClass object
   mountOptions:
     - implicit-dirs
     - uid=1001
