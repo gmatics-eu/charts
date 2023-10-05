@@ -37,6 +37,13 @@ spec:
         {{- (tpl . $) | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.GCStorage.enabled }}
+      serviceAccountName: {{- if .Values.GCStorage.serviceAccountName }}
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 2002
+        fsGroup: 3003
+      {{- end }}
       containers:
         - name: {{ template "geoserver.fullname" . }}
           image: {{ template "geoserver.image" . }}
