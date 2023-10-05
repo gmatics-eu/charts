@@ -4,7 +4,7 @@ metadata:
   name: gcs-bucket-pv
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   capacity:
     storage: 5Gi
   storageClassName: gcs-fuse-bucket #does not need to refer to an existing StorageClass object
