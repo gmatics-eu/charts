@@ -48,25 +48,6 @@ spec:
         - name: {{ template "geoserver.fullname" . }}
           image: {{ template "geoserver.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.GCStorage.enabled }}
-          securityContext:
-            privileged: {{ .Values.image.privileged }}
-            capabilities:
-              add:
-                - SYS_ADMIN
-          {{- end }}
-          {{- if .Values.GCStorage.lifecycle.enabled }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - "/bin/sh"
-                  - "-c"
-                  - "mkdir -p /mnt/{{ .Values.GCStorage.bucket_name }} && export GOOGLE_APPLICATION_CREDENTIALS={{ .Values.GCStorage.credentialsPath }} && gcsfuse --implicit-dirs {{ .Values.GCStorage.bucket_name }} /mnt/{{ .Values.GCStorage.bucket_name }}"
-            preStop:
-              exec:
-                command: [ "fusermount", "-u", "/mnt/{{ .Values.GCStorage.bucket_name }}" ]
-          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}

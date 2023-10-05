@@ -1,7 +1,7 @@
 image:
   registry: docker.io
   repository: kartoza/geoserver
-  tag: "2.17.0"
+  tag: "2.21.0"
   pullPolicy: IfNotPresent
   privileged: false
 
@@ -9,9 +9,6 @@ GCStorage:
   enabled: false
   bucket_name:
   serviceAccountName:
-  credentialsPath: /tmp/key.json
-  lifecycle:
-    enabled: false
 
 geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/data_dir/gwc
@@ -26,11 +23,17 @@ geoserverPassword:
 existingSecret: |
 
 # Define this for extra GeoServer environment variables
+# Format:
+# extraPodEnv: |
+#   - name: KEY_1
+#     value: "VALUE_1"
+#   - name: KEY_2
+#     value: "VALUE_2"
 extraPodEnv: |
-#  - name: KEY_1
-#    value: "VALUE_1"
-#  - name: KEY_2
-#    value: "VALUE_2"
+  - name: INITIAL_MEMORY
+    value: "2G"
+  - name: MAXIMUM_MEMORY
+    value: "4G"
 
 # This will be evaluated as pod spec
 extraPodSpec: |
@@ -76,6 +79,10 @@ service:
 
   # loadBalancerSourceRanges:
   # - 10.10.10.0/24
+
+affinity: {}
+
+tolerations: {}
 
 ingress:
   enabled: false
