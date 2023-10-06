@@ -1,0 +1,23 @@
+{{- if .Values.GCStorage.enabled }}
+{{- if .Values.extraVolumeMounts }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gcs-xcube-bucket-pv
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 5Gi
+  storageClassName: gcs-fuse-bucket #does not need to refer to an existing StorageClass object
+  mountOptions:
+    - implicit-dirs
+    - uid=1001
+    - gid=3003
+  csi:
+    driver: gcsfuse.csi.storage.gke.io
+    volumeHandle: {{ .Values.GCStorage.bucket_name }}
+    readOnly: true #optional
+
+{{- end }}
+{{- end }}

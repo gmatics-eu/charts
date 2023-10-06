@@ -2,3 +2,7 @@ imageCredentials:
   registry: docker.io
   username: ""
   password: ""
+
+container:
+  image: gmaticseu/xcube:SYS-92
+  pullPolicy: IfNotPresent

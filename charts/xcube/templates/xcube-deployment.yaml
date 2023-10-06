@@ -21,16 +21,26 @@ spec:
       annotations:
         kompose.cmd: kompose convert -c
         kompose.version: 1.30.0 (HEAD)
+        {{- with .Values.podAnnotations }}
+        {{- (tpl . $) | nindent 8 }}
+        {{- end }}
       creationTimestamp: null
       labels:
         io.kompose.network/docker-default: "true"
         io.kompose.service: xcube
     spec:
+      {{- if .Values.GCStorage.enabled }}
+      serviceAccountName: {{ .Values.GCStorage.serviceAccountName }}
+      {{- end }}
       imagePullSecrets:
         - name: docker-pull-secret
       containers:
-        - image: gmaticseu/xcube:SYS-92
+        - image: {{ .Values.container.image }}
           name: xcube
+          imagePullPolicy: {{ .Values.container.pullPolicy }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -38,9 +48,15 @@ spec:
           volumeMounts:
             - mountPath: /etc/config
               name: xcube-configmap-volume
+            {{- with .Values.extraVolumeMounts }}
+            {{- (tpl . $) | nindent 12 }}
+            {{- end }}
       restartPolicy: Always
       volumes:
         - name: xcube-configmap-volume
           configMap:
             name: xcube-configmap
+        {{- with .Values.extraVolume }}
+        {{- (tpl . $) | nindent 8 }}
+        {{- end }}
 status: {}
