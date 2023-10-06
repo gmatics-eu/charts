@@ -1,6 +1,6 @@
 name: xcube
 description: A generated Helm Chart for xcube from Gmatics
-version: 0.1.8
+version: 0.1.9
 apiVersion: v2
 keywords:
   - xcube
