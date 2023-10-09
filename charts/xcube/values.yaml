@@ -6,3 +6,6 @@ imageCredentials:
 container:
   image: gmaticseu/xcube:SYS-92
   pullPolicy: IfNotPresent
+
+configContent: ""
+
