@@ -1,29 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: xcube-configmap
-  namespace: default
+  name: {{ .Release.Name }}-configmap
 data:
-  config.yml: |
-
-    DatasetAttribution:
-      - "© by Synergise Inc. and ESA"
-
-    DatasetChunkCacheSize: 100M
-
-    DataStores:
-
-      # This section needs to be kept, because it is part of xcube server documentation using DataStores.
-      - Identifier: edc
-        StoreId: s3
-        StoreParams:
-          root: xcube-dcfs/edc-xc-viewer-data
-          max_depth: 1
-          storage_options:
-            anon: true
-            # client_kwargs:
-            #  endpoint_url: https://s3.eu-central-1.amazonaws.com
-        Datasets:
-          - Path: "*2.zarr"
-            Style: "default"
-
+  config.yml: |-
+{{ .Files.Get "files/config.yml" | indent 4 }}
