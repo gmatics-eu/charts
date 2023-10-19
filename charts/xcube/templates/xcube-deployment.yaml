@@ -38,6 +38,9 @@ spec:
         - image: {{ .Values.container.image }}
           name: xcube
           imagePullPolicy: {{ .Values.container.pullPolicy }}
+          {{- if .Values.container.command }}
+          command: {{ .Values.container.command }}
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}

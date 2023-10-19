@@ -3,5 +3,4 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-  config.yml: |
-{{- toYaml .Values.configContent | nindent 2 }}
+  {{- (.Files.Glob "files/*").AsConfig | nindent 2 }}
