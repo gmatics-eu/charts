@@ -67,7 +67,7 @@ spec:
       volumes:
         - name: {{ .Values.configmap.name }}
           configMap:
-            name: xcube-configmap
+            name: {{ .Release.Name }}-configmap
         {{- with .Values.extraVolume }}
         {{- (tpl . $) | nindent 8 }}
         {{- end }}
