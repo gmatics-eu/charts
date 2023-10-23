@@ -34,7 +34,6 @@ spec:
         {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
         {{- (tpl . $) | nindent 8 }}
         {{- end }}
