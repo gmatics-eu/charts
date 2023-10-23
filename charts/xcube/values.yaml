@@ -7,5 +7,46 @@ container:
   image: gmaticseu/xcube:SYS-92
   pullPolicy: IfNotPresent
   command:
+  replicas: 1
 
+GCStorage:
+  enabled: false
+  bucket_name:
+  serviceAccountName:
 
+# podAnnotations: |
+#   "gke-gcsfuse/volumes": "true"
+#   "gke-gcsfuse/cpu-limit": "500m"
+#   "gke-gcsfuse/memory-limit": "200Mi"
+#   "gke-gcsfuse/ephemeral-storage-limit": "15Gi"
+
+# extraVolume: |
+#   - name: gcs-${deployment_name}-volume
+#     persistentVolumeClaim:
+#       claimName: gcs-${deployment_name}-bucket-pvc
+#
+# extraVolumeMounts: |
+#   - name: gcs-${deployment_name}-volume
+#     mountPath: /var/log/${bucket_name}
+#     readOnly: false
+
+service:
+  ## xcube service type
+  type: ClusterIP
+  # clusterIP: ""
+  # externalIPs: ""
+  # port: 80
+
+  # nodePort:
+
+  labels: |
+  annotations: |
+
+  # loadBalancerIP:
+
+  # loadBalancerSourceRanges:
+  # - 10.10.10.0/24
+
+configmap:
+  mountPath: /etc/config
+  name: xcube-configmap-volume

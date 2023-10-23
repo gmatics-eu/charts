@@ -5,6 +5,9 @@ image:
   pullPolicy: IfNotPresent
   privileged: false
 
+container:
+  replicas: 1
+
 GCStorage:
   enabled: false
   bucket_name:

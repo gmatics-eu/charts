@@ -14,7 +14,7 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.container.replicas }}
   selector:
     matchLabels:
       app: {{ template "geoserver.fullname" . }}

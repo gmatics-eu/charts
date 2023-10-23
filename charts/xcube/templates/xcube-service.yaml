@@ -1,21 +1,30 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -c
-    kompose.version: 1.30.0 (HEAD)
-  creationTimestamp: null
+  name: {{ template "xcube.fullname" . }}
   labels:
-    io.kompose.service: xcube
-  name: xcube
-  namespace: default
+    app: {{ template "xcube.fullname" . }}
+    chart: {{ template "xcube.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+    kubernetes.io/cluster-service: "true"
+    {{- with .Values.service.labels }}
+    {{- tpl . $ | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- tpl . $ | nindent 4 }}
+    {{- end }}
 spec:
-  type: LoadBalancer
+  type: {{ .Values.service.type }}
+  {{- if .Values.service.externalIPs }}
+  externalIPs: {{ .Values.service.externalIPs }}
+  {{- end }}
   ports:
     - name: "8080"
       port: 8080
       targetPort: 8080
   selector:
-    io.kompose.service: xcube
-status:
-  loadBalancer: {}
+    app: {{ template "xcube.fullname" . }}
+    release: {{ .Release.Name | quote }}
+

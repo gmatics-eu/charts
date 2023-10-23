@@ -1,33 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -c
-    kompose.version: 1.30.0 (HEAD)
-  creationTimestamp: null
+  name: {{ template "xcube.fullname" . }}
   labels:
-    io.kompose.service: xcube
-  name: xcube
-  namespace: default
+    app: {{ template "xcube.fullname" . }}
+    chart: {{ template "xcube.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+  {{- with .Values.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.container.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: xcube
+      app: {{ template "xcube.fullname" . }}
+      release: {{ .Release.Name | quote }}
   strategy:
     type: Recreate
   template:
     metadata:
+      name: {{ template "xcube.fullname" . }}
+      labels:
+        app: {{ template "xcube.fullname" . }}
+        chart: {{ template "xcube.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+        {{- with .Values.podLabels }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
       annotations:
-        kompose.cmd: kompose convert -c
-        kompose.version: 1.30.0 (HEAD)
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
         {{- (tpl . $) | nindent 8 }}
         {{- end }}
-      creationTimestamp: null
-      labels:
-        io.kompose.network/docker-default: "true"
-        io.kompose.service: xcube
     spec:
       {{- if .Values.GCStorage.enabled }}
       serviceAccountName: {{ .Values.GCStorage.serviceAccountName }}
@@ -49,14 +59,14 @@ spec:
               protocol: TCP
           resources: {}
           volumeMounts:
-            - mountPath: /etc/config
-              name: xcube-configmap-volume
+            - mountPath: {{ .Values.configmap.mountPath }}
+              name: {{ .Values.configmap.name }}
             {{- with .Values.extraVolumeMounts }}
             {{- (tpl . $) | nindent 12 }}
             {{- end }}
       restartPolicy: Always
       volumes:
-        - name: xcube-configmap-volume
+        - name: {{ .Values.configmap.name }}
           configMap:
             name: xcube-configmap
         {{- with .Values.extraVolume }}
