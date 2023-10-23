@@ -13,6 +13,8 @@ GCStorage:
   enabled: false
   bucket_name:
   serviceAccountName:
+  volume_name:
+  pvc_name:
 
 # podAnnotations: |
 #   "gke-gcsfuse/volumes": "true"
