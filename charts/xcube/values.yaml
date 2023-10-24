@@ -16,6 +16,11 @@ GCStorage:
   volume_name:
   pvc_name:
 
+extraPodEnv: |
+  - name: XCUBE_CONFIG_NAME
+    value: "config.yml"
+  
+
 # podAnnotations: |
 #   "gke-gcsfuse/volumes": "true"
 #   "gke-gcsfuse/cpu-limit": "500m"
