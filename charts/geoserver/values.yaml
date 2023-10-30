@@ -13,6 +13,15 @@ GCStorage:
   bucket_name:
   serviceAccountName:
 
+storageClassFS:
+  name: filestore-sc
+  volumeBindingMode : Immediate #WaitForFirstConsumer
+  reclaimPolicy: Retain #Delete
+  parameters:
+    tier: standard
+    network: default
+
+
 geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/data_dir/gwc
 

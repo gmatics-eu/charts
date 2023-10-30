@@ -1,13 +1,14 @@
 apiVersion: v2
 name: geoserver
-version: 0.5.9
-appVersion: 2.17.0
+version: 0.6.0
+appVersion: 2.21.0
 description: Chart for GeoServer
 keywords:
   - GeoServer
   - GIS
   - Gmatics
   - ingress
+  - filestore
 home: http://geoserver.org
 sources:
   - https://github.com/geoserver/geoserver

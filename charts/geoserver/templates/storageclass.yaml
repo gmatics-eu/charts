@@ -1,11 +1,11 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: filestore-sc
+  name: {{ .Values.storageClassFS.name }}
 provisioner: filestore.csi.storage.gke.io
-volumeBindingMode: {{ .Values.storageClasse.volumeBindingMode }}
+volumeBindingMode: {{ .Values.storageClassFS.volumeBindingMode }}
 allowVolumeExpansion: true
-reclaimPolicy: Retain
+reclaimPolicy: {{ .Values.storageClassFS.reclaimPolicy }}
 parameters:
-  tier: standard
-  network: default
+  tier: {{ .Values.storageClassFS.parameters.tier }}
+  network: {{ .Values.storageClassFS.parameters.network }}
