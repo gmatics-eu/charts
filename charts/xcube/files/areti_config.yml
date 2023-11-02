@@ -1,0 +1,90 @@
+DatasetAttribution:
+  - "© by GMATICS"
+
+#DatasetChunkCacheSize: 100M
+
+## You may want to specify a location of your server resources.
+#base_dir: s3://<bucket>/<path-to-your>/<resources>/
+
+## You may want to specify a remote location of your viewer resources.
+#Viewer:
+#  Configuration:
+#    Path: s3://<bucket>/<path-to-your-viewer>/<resources>
+DataStores:
+
+  # This section needs to be kept, because it is part of xcube server documentation using DataStores.
+  - Identifier: areti
+    StoreId: s3
+    StoreParams:
+      root: cubes-bucket/entel/areti
+      max_depth: 1
+      storage_options:
+        anon: false
+        #client_kwargs:
+        key: AKIATCNUVNJ6CGCOSUTA
+        secret: 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
+
+        #endpoint_url: https://s3.eu-west-3.amazonaws.com
+    Datasets:
+      - Identifier: complete_cube_puntual_AT
+        Path: complete_cube_puntual_AT.zarr
+        Title: Alta Tensione
+        Style: "default"
+      - Identifier: complete_cube_puntual_MT
+        Path: complete_cube_puntual_MT.zarr
+        Title: Media Tensione
+        Style: "default"
+
+Styles:
+  - Identifier: default
+    ColorMappings:
+      conc_chl:
+        ColorBar: plasma
+        ValueRange: [0., 24.]
+      conc_tsm:
+        ColorBar: plasma
+        ValueRange: [ 0., 24. ]
+      kd489:
+        ColorBar: jet
+        ValueRange: [0., 6.]
+      rgb:
+        Red:
+          Variable: conc_chl
+          ValueRange: [0., 24.]
+        Green:
+          Variable: conc_tsm
+          ValueRange: [0., 100.]
+        Blue:
+          Variable: kd489
+          ValueRange: [0., 6.]
+  - Identifier: tif_style
+    ColorMappings:
+      band_1:
+        ColorBar: bone
+        ValueRange: [ 0., 255. ]
+      band_2:
+        ColorBar: bone
+        ValueRange: [ 0., 255. ]
+      band_3:
+        ColorBar: bone
+        ValueRange: [ 0., 255. ]
+      rgb:
+        Red:
+          Variable: band_1
+          ValueRange: [ 0., 255. ]
+        Green:
+          Variable: band_2
+          ValueRange: [ 0., 255. ]
+        Blue:
+          Variable: band_3
+          ValueRange: [ 0., 255. ]
+
+ServiceProvider:
+  ProviderName: GMATICS
+  ProviderSite: https://www.gmatics.eu
+  ServiceContact:
+    IndividualName: Iacopo Modica
+    PositionName: Head of artificial intelligence and software engineering
+    ContactInfo:
+      Phone:
+        Voice: +39 3240552090
