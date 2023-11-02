@@ -21,8 +21,8 @@ DataStores:
       storage_options:
         anon: false
         #client_kwargs:
-        key: AKIATCNUVNJ6CGCOSUTA
-        secret: 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
+        key: $AWS_ACCESS_KEY_ID
+        secret: $AWS_SECRET_ACCESS_KEY
 
         #endpoint_url: https://s3.eu-west-3.amazonaws.com
     Datasets:
