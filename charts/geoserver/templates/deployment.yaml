@@ -81,6 +81,10 @@ spec:
             {{- tpl . $ | nindent 10 }}
             {{- end }}
           {{- else }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/usr/local/tomcat/bin/catalina.sh stop && sleep 30" ]
           startupProbe:
             httpGet:
               path: /geoserver
