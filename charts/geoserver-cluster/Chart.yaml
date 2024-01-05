@@ -1,0 +1,20 @@
+apiVersion: v2
+name: geoserver-cluster
+version: 0.1.0
+appVersion: 2.21.0
+description: Chart for GeoServer
+keywords:
+  - GeoServer
+  - GIS
+  - Gmatics
+  - ingress
+  - separateGWC
+  - filestore
+home: http://geoserver.org
+sources:
+  - https://github.com/geoserver/geoserver
+maintainers:
+  - name: raffaele scarano
+    email: raffaele.scarano@gmatics.eu
+engine: gotpl
+icon: https://raw.githubusercontent.com/kartoza/charts/master/assets/logo/GeoServer_500.png

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+spec:
+  selector:
+    matchLabels:
+      app: db
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  serviceName: db-headless
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - image: kartoza/postgis:16-3.4
+          name: db
+          env:
+            - name: ALLOW_IP_RANGE
+              value: "0.0.0.0/0"
+            - name: POSTGRES_DB
+              value: gis
+            - name: FORCE_SSL
+              value: "TRUE"
+            - name: POSTGRES_PASS
+              value: docker
+            - name: POSTGRES_USER
+              value: docker
+          ports:
+          - containerPort: 5432
+            name: db
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /var/lib/postgresql
+            name: dbdata
+      restartPolicy: Always
+      volumes:
+      - name: dbdata
+        persistentVolumeClaim:
+            claimName: dbdata
+  volumeClaimTemplates:
+    - metadata:
+        name: dbdata
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 8Gi

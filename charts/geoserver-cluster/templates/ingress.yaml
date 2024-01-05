@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gmatics
+  annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: gmatics.kartoza.com
+      http:
+        paths:
+          - path: /node/geoserver
+            pathType: Prefix
+            backend:
+              service:
+                name: node
+                port:
+                  number: 8082
+          - path: /geoserver
+            pathType: Prefix
+            backend:
+              service:
+                name: master
+                port:
+                  number: 8081

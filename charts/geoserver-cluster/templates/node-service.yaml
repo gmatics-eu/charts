@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: node
+  name: node
+spec:
+  ports:
+    - name: geonode-port
+      port: 8082
+      targetPort: 8080
+  selector:
+    app: node

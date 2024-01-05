@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node
+  name: node
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node
+  template:
+    metadata:
+      labels:
+        app: node
+    spec:
+      containers:
+        - env:
+            - name: BROKER_URL
+              value: tcp://master:61661
+            - name: CLUSTERING
+              value: "True"
+            - name: CLUSTER_DURABILITY
+              value: "false"
+            - name: EMBEDDED_BROKER
+              value: disabled
+            - name: GEOSERVER_ADMIN_PASSWORD
+              value: admin
+            - name: GEOSERVER_ADMIN_USER
+              value: admin
+            - name: HOST
+              value: db
+            - name: POSTGRES_DB
+              value: gis
+            - name: POSTGRES_PASS
+              value: docker
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: docker
+            - name: READONLY
+              value: disabled
+            - name: SSL_MODE
+              value: allow
+            - name: TOGGLE_MASTER
+              value: "true"
+            - name: TOGGLE_SLAVE
+              value: "true"
+            - name: TOMCAT_EXTRAS
+              value: "true"
+            - name: GEOSERVER_CONTEXT_ROOT
+              value: node#geoserver
+            - name: GEOWEBCACHE_CACHE_DIR
+              value: /opt/geoserver/gwc
+            - name: COMMUNITY_EXTENSIONS
+              value: "cog-plugin, ogcapi-plugin, notification-plugin, sec-oauth2-openid-connect-plugin"
+          image: kartoza/geoserver:2.23.2
+          name: node
+          ports:
+            - containerPort: 8080
+              name: geonode-port
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/geoserver/data_dir
+              name: geoserver-cluster-data
+            - mountPath: /opt/geoserver/gwc
+              name: geoserver-gwc-data
+      restartPolicy: Always
+      volumes:
+        - name: geoserver-cluster-data
+          persistentVolumeClaim:
+            claimName: geoserver-cluster-data
+        - name: geoserver-gwc-data
+          persistentVolumeClaim:
+            claimName: geoserver-gwc-data
