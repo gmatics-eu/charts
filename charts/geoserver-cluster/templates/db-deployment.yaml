@@ -29,8 +29,8 @@ spec:
             - name: POSTGRES_USER
               value: {{ .Values.postgres.user }}
           ports:
-          - containerPort: 5432
-            name: {{ .Values.postgres.port }}
+          - containerPort: {{ .Values.postgres.port }}
+            name: db
             protocol: TCP
           volumeMounts:
           - mountPath: /var/lib/postgresql

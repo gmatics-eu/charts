@@ -10,6 +10,11 @@ container:
   node:
     replicas: 1
 
+postgres:
+  port: "5432"
+  db: gis
+  password: root
+  user: postgres
 
 geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/gwc
