@@ -5,7 +5,7 @@ metadata:
     app: node
   name: node
 spec:
-  replicas: 1
+  replicas: {{ .Values.container.node.replicas }}
   selector:
     matchLabels:
       app: node
@@ -15,29 +15,21 @@ spec:
         app: node
     spec:
       containers:
+        - name: node
+        {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+        {{- end }}
         - env:
             - name: BROKER_URL
-              value: tcp://master:61661
+              value: tcp://{{ template "geoserver.fullname" . }}:61661
+            - name: HOST
+              value: db
             - name: CLUSTERING
               value: "True"
             - name: CLUSTER_DURABILITY
               value: "false"
             - name: EMBEDDED_BROKER
               value: disabled
-            - name: GEOSERVER_ADMIN_PASSWORD
-              value: admin
-            - name: GEOSERVER_ADMIN_USER
-              value: admin
-            - name: HOST
-              value: db
-            - name: POSTGRES_DB
-              value: gis
-            - name: POSTGRES_PASS
-              value: docker
-            - name: POSTGRES_PORT
-              value: "5432"
-            - name: POSTGRES_USER
-              value: docker
             - name: READONLY
               value: disabled
             - name: SSL_MODE
@@ -46,16 +38,45 @@ spec:
               value: "true"
             - name: TOGGLE_SLAVE
               value: "true"
-            - name: TOMCAT_EXTRAS
-              value: "true"
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.db }}
+            - name: POSTGRES_PASS
+              value: {{ .Values.postgres.password }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.postgres.port }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.user }}
             - name: GEOSERVER_CONTEXT_ROOT
               value: node#geoserver
+          {{- if .Values.enableJSONP }}
+            - name: ENABLE_JSONP
+              value: {{ .Values.enableJSONP | quote }}
+          {{- end }}
+          {{- if .Values.geoserverDataDir }}
+            - name: GEOSERVER_DATA_DIR
+              value: {{ .Values.geoserverDataDir | quote }}
+          {{- end }}
+          {{- if .Values.geowebcacheCacheDir }}
             - name: GEOWEBCACHE_CACHE_DIR
-              value: /opt/geoserver/gwc
-            - name: COMMUNITY_EXTENSIONS
-              value: "cog-plugin, ogcapi-plugin, notification-plugin, sec-oauth2-openid-connect-plugin"
-          image: kartoza/geoserver:2.23.2
-          name: node
+              value: {{ .Values.geowebcacheCacheDir | quote }}
+          {{- end }}
+            - name: GEOSERVER_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "geoserver.secretName" . }}
+                  key: geoserver-user
+            - name: GEOSERVER_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "geoserver.secretName" . }}
+                  key: geoserver-password
+                  {{- with .Values.extraPodEnv }}
+                  {{- tpl . $ | nindent 12 }}
+                  {{- end }}
+          {{- with .Values.extraPodEnv }}
+          {{- tpl . $ | nindent 12 }}
+          {{- end }}
+          image: {{ template "geoserver.image" . }}
           ports:
             - containerPort: 8080
               name: geonode-port
@@ -68,9 +89,42 @@ spec:
               name: geoserver-gwc-data
       restartPolicy: Always
       volumes:
-        - name: geoserver-cluster-data
-          persistentVolumeClaim:
-            claimName: geoserver-cluster-data
-        - name: geoserver-gwc-data
-          persistentVolumeClaim:
-            claimName: geoserver-gwc-data
+        {{- with .Values.extraVolume }}
+        {{- (tpl . $) | nindent 8 }}
+        {{- end }}
+{{- if and .Values.persistence.geoserverDataDir.enabled .Values.persistence.geoserverDataDir.existingClaim }}
+          - name: geoserver-cluster-data
+            persistentVolumeClaim:
+{{- with .Values.persistence.geoserverDataDir.existingClaim }}
+              claimName: {{ tpl . $ }}
+{{- end }}
+{{- else if .Values.persistence.geoserverDataDir.enabled }}
+          - name: geoserver-cluster-data
+            persistentVolumeClaim:
+              claimName: {{ template "geoserver.fullname" . }}-geoserver-data-dir
+{{- else if not .Values.persistence.geoserverDataDir.enabled }}
+          - name: geoserver-cluster-data
+            emptyDir: {}
+{{- end }}
+{{- if and .Values.persistence.geowebcacheCacheDir.enabled .Values.persistence.geowebcacheCacheDir.existingClaim }}
+          - name: geowebcache-cache-dir
+            persistentVolumeClaim:
+{{- with .Values.persistence.geowebcacheCacheDir.existingClaim }}
+              claimName: {{ tpl . $ }}
+{{- end }}
+{{- else if .Values.persistence.geowebcacheCacheDir.enabled }}
+          - name: geowebcache-cache-dir
+            persistentVolumeClaim:
+              claimName: {{ template "geoserver.fullname" . }}-geowebcache-cache-dir
+{{- else if not .Values.persistence.geowebcacheCacheDir.enabled }}
+          - name: geowebcache-cache-dir
+            emptyDir: { }
+{{- end }}
+{{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

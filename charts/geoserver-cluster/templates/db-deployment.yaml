@@ -21,16 +21,16 @@ spec:
             - name: ALLOW_IP_RANGE
               value: "0.0.0.0/0"
             - name: POSTGRES_DB
-              value: gis
+              value: {{ .Values.postgres.db }}
             - name: FORCE_SSL
               value: "TRUE"
             - name: POSTGRES_PASS
-              value: docker
+              value: {{ .Values.postgres.password }}
             - name: POSTGRES_USER
-              value: docker
+              value: {{ .Values.postgres.user }}
           ports:
           - containerPort: 5432
-            name: db
+            name: {{ .Values.postgres.port }}
             protocol: TCP
           volumeMounts:
           - mountPath: /var/lib/postgresql

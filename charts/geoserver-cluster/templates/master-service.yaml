@@ -2,9 +2,24 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: master
-  name: master
+    app: {{ template "geoserver.fullname" . }}
+    chart: {{ template "geoserver.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+    kubernetes.io/cluster-service: "true"
+    {{- with .Values.service.labels }}
+    {{- tpl . $ | nindent 4 }}
+    {{- end }}
+  name: {{ template "geoserver.fullname" . }}
+  annotations:
+      {{- with .Values.service.annotations }}
+      {{- tpl . $ | nindent 4 }}
+      {{- end }}
 spec:
+  type: {{ .Values.service.type }}
+  {{- if .Values.service.externalIPs }}
+  externalIPs: {{ .Values.service.externalIPs }}
+  {{- end }}
   ports:
     - name: geomaster-port
       port: 8081
@@ -13,4 +28,5 @@ spec:
       port: 61661
       targetPort: 61661
   selector:
-    app: master
+    app: {{ template "geoserver.fullname" . }}
+    release: {{ .Release.Name | quote }}

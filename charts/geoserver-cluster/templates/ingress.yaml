@@ -4,23 +4,40 @@ metadata:
   name: gmatics
   annotations:
         nginx.ingress.kubernetes.io/rewrite-target: /
+        {{- with .Values.ingress.annotations }}
+        {{- toYaml . | nindent 4 }}
+        {{- end }}
+  labels:
+    app: {{ template "geoserver.fullname" . }}
+    chart: {{ template "geoserver.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+    {{- with .Values.ingress.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   ingressClassName: nginx
   rules:
-    - host: gmatics.kartoza.com
-      http:
-        paths:
-          - path: /node/geoserver
-            pathType: Prefix
-            backend:
-              service:
-                name: node
-                port:
-                  number: 8082
-          - path: /geoserver
-            pathType: Prefix
-            backend:
-              service:
-                name: master
-                port:
-                  number: 8081
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+        - path: /node/geoserver
+          pathType: Prefix
+          backend:
+            service:
+              name: node
+              port:
+                number: 8082
+        - path: /geoserver
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ template "geoserver.fullname" . }}
+              port:
+                number: 8081
+    {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
