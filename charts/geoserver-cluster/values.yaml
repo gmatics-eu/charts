@@ -108,7 +108,7 @@ probe: |
 persistence:
   geoserverDataDir:
     enabled: true
-    existingClaim: false
+    existingClaim:
     mountPath: /opt/geoserver/data_dir
     subPath: "data_dir"
     size: 8Gi
@@ -118,7 +118,7 @@ persistence:
     annotations: {}
   geowebcacheCacheDir:
     enabled: true
-    existingClaim: false
+    existingClaim:
     mountPath: /opt/geoserver/gwc
     subPath: "gwc"
     size: 8Gi
