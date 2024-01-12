@@ -62,7 +62,7 @@ spec:
             - name: POSTGRES_PASS
               value: {{ .Values.postgres.password }}
             - name: POSTGRES_PORT
-              value: {{ .Values.postgres.port }}
+              value: "5432"
             - name: POSTGRES_USER
               value: {{ .Values.postgres.user }}
             {{- if .Values.enableJSONP }}

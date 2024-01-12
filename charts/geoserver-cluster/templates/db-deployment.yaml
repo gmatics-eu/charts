@@ -29,7 +29,7 @@ spec:
             - name: POSTGRES_USER
               value: {{ .Values.postgres.user }}
           ports:
-          - containerPort: {{ .Values.postgres.port }}
+          - containerPort: 5432
             name: db
             protocol: TCP
           volumeMounts:
