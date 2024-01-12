@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ template "geoserver.fullname" . }}
   labels:
     app: {{ template "geoserver.fullname" . }}
     chart: {{ template "geoserver.chart" . }}
@@ -10,11 +11,10 @@ metadata:
     {{- with .Values.service.labels }}
     {{- tpl . $ | nindent 4 }}
     {{- end }}
-  name: {{ template "geoserver.fullname" . }}
   annotations:
-      {{- with .Values.service.annotations }}
-      {{- tpl . $ | nindent 4 }}
-      {{- end }}
+    {{- with .Values.service.annotations }}
+    {{- tpl . $ | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   {{- if .Values.service.externalIPs }}

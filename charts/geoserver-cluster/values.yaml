@@ -119,7 +119,7 @@ persistence:
   geowebcacheCacheDir:
     enabled: true
     existingClaim: false
-    mountPath: /opt/geoserver/data_dir/gwc
+    mountPath: /opt/geoserver/gwc
     subPath: "gwc"
     size: 8Gi
     # storageClass: "-"

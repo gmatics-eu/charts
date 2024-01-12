@@ -1,27 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: node
   labels:
     app: node
-  name: node
+    chart: {{ template "geoserver.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+  {{- with .Values.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.container.node.replicas }}
   selector:
     matchLabels:
       app: node
+      release: {{ .Release.Name | quote }}
   template:
     metadata:
+      name: node
       labels:
         app: node
+        chart: {{ template "geoserver.chart" . }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+        {{- with .Values.podLabels }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
-                  {{- with .Values.podAnnotations }}
-                  {{- (tpl . $) | nindent 8 }}
-                  {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- (tpl . $) | nindent 8 }}
+        {{- end }}
     spec:
       containers:
-        - env:
+        - name: node
+          image: {{ template "geoserver.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          env:
             - name: BROKER_URL
               value: tcp://{{ template "geoserver.fullname" . }}:61661
             - name: HOST
@@ -72,58 +95,94 @@ spec:
                 secretKeyRef:
                   name: {{ template "geoserver.secretName" . }}
                   key: geoserver-password
-                  {{- with .Values.extraPodEnv }}
-                  {{- tpl . $ | nindent 12 }}
-                  {{- end }}
             {{- with .Values.extraPodEnv }}
             {{- tpl . $ | nindent 12 }}
             {{- end }}
-          image: {{ template "geoserver.image" . }}
-          name: node
           ports:
-            - containerPort: 8080
-              name: geonode-port
+            - name: geonode-port
+              containerPort: 8080
               protocol: TCP
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.probe }}
+            {{- with .Values.probe }}
+            {{- tpl . $ | nindent 10 }}
+            {{- end }}
+          {{- else }}
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/usr/local/tomcat/bin/catalina.sh stop && sleep 30" ]
+          startupProbe:
+            httpGet:
+              path: /node/geoserver
+              port: http-geoserver
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /node/geoserver
+              port: http-geoserver
+              scheme: HTTP
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /node/geoserver
+              port: http-geoserver
+              scheme: HTTP
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 10
           {{- end }}
           volumeMounts:
-            - mountPath: /opt/geoserver/data_dir
-              name: geoserver-cluster-data
-            - mountPath: /opt/geoserver/gwc
-              name: geowebcache-cache-dir
+            {{- if .Values.persistence.geoserverDataDir.enabled }}
+            - name: geoserver-data-dir
+              mountPath: {{ .Values.persistence.geoserverDataDir.mountPath }}
+              subPath: {{ .Values.persistence.geoserverDataDir.subPath }}
+            {{- end }}
+            {{- if .Values.persistence.geowebcacheCacheDir.enabled }}
+            - name: geowebcache-cache-dir
+              mountPath: {{ .Values.persistence.geowebcacheCacheDir.mountPath }}
+              subPath: {{ .Values.persistence.geowebcacheCacheDir.subPath }}
+            {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- (tpl . $) | nindent 12 }}
+            {{- end }}
+      {{- with .Values.extraPodSpec }}
+      {{- tpl . $ | nindent 6 }}
+      {{- end }}
       restartPolicy: Always
       volumes:
         {{- with .Values.extraVolume }}
         {{- (tpl . $) | nindent 8 }}
         {{- end }}
 {{- if and .Values.persistence.geoserverDataDir.enabled .Values.persistence.geoserverDataDir.existingClaim }}
-          - name: geoserver-cluster-data
-            persistentVolumeClaim:
+        - name: geoserver-data-dir
+          persistentVolumeClaim:
 {{- with .Values.persistence.geoserverDataDir.existingClaim }}
-              claimName: {{ tpl . $ }}
+            claimName: {{ tpl . $ }}
 {{- end }}
 {{- else if .Values.persistence.geoserverDataDir.enabled }}
-          - name: geoserver-cluster-data
-            persistentVolumeClaim:
-              claimName: {{ template "geoserver.fullname" . }}-geoserver-data-dir
+        - name: geoserver-data-dir
+          persistentVolumeClaim:
+            claimName: {{ template "geoserver.fullname" . }}-geoserver-data-dir
 {{- else if not .Values.persistence.geoserverDataDir.enabled }}
-          - name: geoserver-cluster-data
-            emptyDir: {}
+        - name: geoserver-data-dir
+          emptyDir: {}
 {{- end }}
 {{- if and .Values.persistence.geowebcacheCacheDir.enabled .Values.persistence.geowebcacheCacheDir.existingClaim }}
-          - name: geowebcache-cache-dir
-            persistentVolumeClaim:
+        - name: geowebcache-cache-dir
+          persistentVolumeClaim:
 {{- with .Values.persistence.geowebcacheCacheDir.existingClaim }}
-              claimName: {{ tpl . $ }}
+            claimName: {{ tpl . $ }}
 {{- end }}
 {{- else if .Values.persistence.geowebcacheCacheDir.enabled }}
-          - name: geowebcache-cache-dir
-            persistentVolumeClaim:
-              claimName: {{ template "geoserver.fullname" . }}-geowebcache-cache-dir
+        - name: geowebcache-cache-dir
+          persistentVolumeClaim:
+            claimName: {{ template "geoserver.fullname" . }}-geowebcache-cache-dir
 {{- else if not .Values.persistence.geowebcacheCacheDir.enabled }}
-          - name: geowebcache-cache-dir
-            emptyDir: { }
+        - name: geowebcache-cache-dir
+          emptyDir: {}
 {{- end }}
 {{- with .Values.affinity }}
       affinity:
