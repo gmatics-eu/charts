@@ -54,18 +54,18 @@ spec:
               value: {{ .Values.postgres.user }}
             - name: GEOSERVER_CONTEXT_ROOT
               value: node#geoserver
-          {{- if .Values.enableJSONP }}
+            {{- if .Values.enableJSONP }}
             - name: ENABLE_JSONP
               value: {{ .Values.enableJSONP | quote }}
-          {{- end }}
-          {{- if .Values.geoserverDataDir }}
+            {{- end }}
+            {{- if .Values.geoserverDataDir }}
             - name: GEOSERVER_DATA_DIR
               value: {{ .Values.geoserverDataDir | quote }}
-          {{- end }}
-          {{- if .Values.geowebcacheCacheDir }}
+            {{- end }}
+            {{- if .Values.geowebcacheCacheDir }}
             - name: GEOWEBCACHE_CACHE_DIR
               value: {{ .Values.geowebcacheCacheDir | quote }}
-          {{- end }}
+            {{- end }}
             - name: GEOSERVER_ADMIN_USER
               valueFrom:
                 secretKeyRef:
@@ -79,9 +79,9 @@ spec:
                   {{- with .Values.extraPodEnv }}
                   {{- tpl . $ | nindent 12 }}
                   {{- end }}
-          {{- with .Values.extraPodEnv }}
-          {{- tpl . $ | nindent 12 }}
-          {{- end }}
+            {{- with .Values.extraPodEnv }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
           image: {{ template "geoserver.image" . }}
           ports:
             - containerPort: 8080
