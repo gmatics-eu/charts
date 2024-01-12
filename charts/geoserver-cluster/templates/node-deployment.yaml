@@ -92,7 +92,7 @@ spec:
             - mountPath: /opt/geoserver/data_dir
               name: geoserver-cluster-data
             - mountPath: /opt/geoserver/gwc
-              name: geoserver-gwc-data
+              name: geowebcache-cache-dir
       restartPolicy: Always
       volumes:
         {{- with .Values.extraVolume }}
