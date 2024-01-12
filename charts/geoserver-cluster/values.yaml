@@ -11,7 +11,7 @@ container:
     replicas: 1
 
 postgres:
-  port: "5432"
+  port: 5432
   db: gis
   password: root
   user: postgres
