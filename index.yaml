@@ -664,6 +664,29 @@ entries:
   geoserver-cluster:
   - apiVersion: v2
     appVersion: 2.24.1
+    created: "2024-01-12T11:54:58.149419098Z"
+    description: Chart for GeoServer
+    digest: aae3d7637c11b5b58c7aba783075cefd9e6c19c7b0f9dfb8015904d0e61898b5
+    home: http://geoserver.org
+    icon: https://raw.githubusercontent.com/kartoza/charts/master/assets/logo/GeoServer_500.png
+    keywords:
+    - GeoServer
+    - GIS
+    - Gmatics
+    - ingress
+    - separateGWC
+    - filestore
+    maintainers:
+    - email: raffaele.scarano@gmatics.eu
+      name: raffaele scarano
+    name: geoserver-cluster
+    sources:
+    - https://github.com/geoserver/geoserver
+    urls:
+    - https://github.com/gmatics-eu/charts/releases/download/geoserver-cluster-0.3.0/geoserver-cluster-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 2.24.1
     created: "2024-01-12T11:20:08.954162893Z"
     description: Chart for GeoServer
     digest: 0d602e7fd506a7b76b1a9e17f7660e1aba2c70b2ba7cda3712e3640cc1bfe145
@@ -1230,4 +1253,4 @@ entries:
     urls:
     - https://github.com/gmatics-eu/charts/releases/download/xcube-0.1.3/xcube-0.1.3.tgz
     version: 0.1.3
-generated: "2024-01-12T11:20:08.954323773Z"
+generated: "2024-01-12T11:54:58.14958094Z"
