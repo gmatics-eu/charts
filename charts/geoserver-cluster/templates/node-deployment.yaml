@@ -21,10 +21,6 @@ spec:
                   {{- end }}
     spec:
       containers:
-
-        {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-        {{- end }}
         - env:
             - name: BROKER_URL
               value: tcp://{{ template "geoserver.fullname" . }}:61661
@@ -88,7 +84,9 @@ spec:
             - containerPort: 8080
               name: geonode-port
               protocol: TCP
-          resources: {}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: /opt/geoserver/data_dir
               name: geoserver-cluster-data
