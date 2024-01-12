@@ -16,7 +16,7 @@ postgres:
   password: root
   user: postgres
 
-geoserverDataDir: /opt/geoserver/data_dir
+# geoserverDataDir: /opt/geoserver/data_dir
 geowebcacheCacheDir: /opt/geoserver/gwc
 
 geoserverUser: admin

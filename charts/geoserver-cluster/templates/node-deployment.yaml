@@ -77,10 +77,6 @@ spec:
             - name: ENABLE_JSONP
               value: {{ .Values.enableJSONP | quote }}
             {{- end }}
-            {{- if .Values.geoserverDataDir }}
-            - name: GEOSERVER_DATA_DIR
-              value: {{ .Values.geoserverDataDir | quote }}
-            {{- end }}
             {{- if .Values.geowebcacheCacheDir }}
             - name: GEOWEBCACHE_CACHE_DIR
               value: {{ .Values.geowebcacheCacheDir | quote }}
