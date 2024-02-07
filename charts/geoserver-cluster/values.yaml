@@ -91,6 +91,8 @@ tolerations: {}
 
 ingress:
   enabled: true
+  issuer_name:
+  static_ip_name:
   annotations: {}
   labels: {}
   host: geoserver.hostname
