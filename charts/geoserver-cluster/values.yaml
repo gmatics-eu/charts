@@ -109,23 +109,9 @@ persistence:
   geoserverDataDir:
     enabled: true
     existingClaim:
-    mountPath: /opt/geoserver/data_dir
-    subPath: "data_dir"
-    size: 8Gi
-    # storageClass: "-"
-    accessModes:
-      - ReadWriteOnce
-    annotations: {}
   geowebcacheCacheDir:
     enabled: true
     existingClaim:
-    mountPath: /opt/geoserver/gwc
-    subPath: "gwc"
-    size: 8Gi
-    # storageClass: "-"
-    accessModes:
-      - ReadWriteOnce
-    annotations: {}
 
 networkPolicy:
   ## Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
